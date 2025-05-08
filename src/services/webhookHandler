@@ -1,0 +1,30 @@
+import { chatwootService } from './chatwootService';
+
+export const handleChatwootWebhook = async (req, res) => {
+  try {
+    const { event, data } = req.body;
+
+    switch (event) {
+      case 'message_created':
+        if (data.message_type === 'outgoing') {
+          // Handle agent messages
+          const { conversation_id, content } = data;
+          // Update your chat UI with the new message
+          // You'll need to implement a way to broadcast this to your React component
+        }
+        break;
+      
+      case 'conversation_status_changed':
+        // Handle conversation status changes
+        break;
+
+      default:
+        console.log('Unhandled webhook event:', event);
+    }
+
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Webhook handler error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};

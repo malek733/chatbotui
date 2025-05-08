@@ -1,0 +1,47 @@
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'https://app.ev24.support/api/v1',
+  headers: {
+    'api_access_token': 'pQyr3U7F6hjBQPr6kefkF1QK',
+    'Content-Type': 'application/json'
+  }
+});
+
+export const chatwootService = {
+  async createContact() {
+    const response = await api.post('/accounts/4/contacts', {
+      inbox_id: 'new',
+      name: 'Visitor',
+      email: 'visitor@example.com'
+    });
+    return response.data;
+  },
+
+  async createConversation(contactId) {
+    const response = await api.post('/accounts/4/conversations', {
+      contact_id: contactId,
+      inbox_id: 'new',
+      status: 'pending'
+    });
+    return response.data;
+  },
+
+  async sendMessage(conversationId, message) {
+    const response = await api.post(
+      `/accounts/4/conversations/${conversationId}/messages`,
+      {
+        content: message,
+        message_type: 'incoming'
+      }
+    );
+    return response.data;
+  },
+
+  async getMessages(conversationId) {
+    const response = await api.get(
+      `/accounts/4/conversations/${conversationId}/messages`
+    );
+    return response.data;
+  }
+};
